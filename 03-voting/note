@@ -1,0 +1,19 @@
+#[INIT]
+yxzhang@SolanaLearn:voting$ avm use latest
+Now using anchor version 1.0.2.
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ mkdir 03-voting
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ cd 03-voting/
+yxzhang@SolanaLearn:03-voting$ anchor init --no-install --no-git voting 
+yxzhang@SolanaLearn:03-voting$ cd voting/
+yxzhang@SolanaLearn:voting$ rm -rf app/ migrations/ .gitignore .prettierignore package.json tsconfig.json 
+yxzhang@SolanaLearn:voting$ anchor build
+yxzhang@SolanaLearn:voting$ anchor test
+#[EDIT]
+# 编写program代码，构建成功
+#[TEST]
+yxzhang@SolanaLearn:voting$ mkdir programs/voting/idls
+yxzhang@SolanaLearn:voting$ cp target/idl/voting.json programs/voting/idls/
+# 编写test代码
+yxzhang@SolanaLearn:voting$ cargo add --dev anchor-litesvm
+yxzhang@SolanaLearn:voting$ anchor test
+# 使用了AnchorLiteSVM加载IDL后，只能使用加载后生成的struct，不能在使用src中的struct，否则会出现entrypoint冲突
