@@ -2,6 +2,8 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum ErrorCode {
-    #[msg("Custom error message")]
-    CustomError,
+    #[msg("Voting has not started yet")]
+    VotingNotStarted,
+    #[msg("Voting has stopped")]
+    VotingStopped,
 }
