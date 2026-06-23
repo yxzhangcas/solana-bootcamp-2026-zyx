@@ -3,3 +3,6 @@
 // 其中xxx.rs和mod.rs中内容相同
 pub mod make;
 pub use make::*;
+
+pub mod take;
+pub use take::*;

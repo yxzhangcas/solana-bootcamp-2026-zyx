@@ -13,6 +13,9 @@ pub mod escrow {
     use super::*;
 
     pub fn exec_make(ctx: Context<Make>, seed: u64, receive: u64, amount: u64) -> Result<()> {
-        make::handler(ctx, seed, receive, amount)
+        make::make_handler(ctx, seed, receive, amount)
+    }
+    pub fn exec_take(ctx: Context<Take>) -> Result<()> {
+        take::take_handler(ctx)
     }
 }

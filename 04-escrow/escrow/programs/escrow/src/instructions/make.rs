@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token_2022::TransferChecked,
-    token_interface::{transfer_checked, Mint, TokenAccount, TokenInterface},
+    token_interface::{self, Mint, TokenAccount, TokenInterface},
 };
 
 use crate::{error::EscrowError, state::Escrow};
@@ -64,7 +64,7 @@ impl<'info> Make<'info> {
     }
     fn deposit_tokens(&mut self, amount: u64) -> Result<()> {
         // 此处不需要额外签名，maker的签名就足够了
-        transfer_checked(
+        token_interface::transfer_checked(
             CpiContext::new(
                 self.token_program.key(),
                 TransferChecked {
@@ -81,11 +81,11 @@ impl<'info> Make<'info> {
     }
 }
 
-pub fn handler(ctx: Context<Make>, seed: u64, receive: u64, amount: u64) -> Result<()> {
+pub fn make_handler(ctx: Context<Make>, seed: u64, receive: u64, amount: u64) -> Result<()> {
     require_gt!(receive, 0, EscrowError::InvalidAmount);
     require_gt!(amount, 0, EscrowError::InvalidAmount);
     ctx.accounts
-        .populate_escrow(seed, amount, ctx.bumps.escrow)?;
+        .populate_escrow(seed, receive, ctx.bumps.escrow)?;
     ctx.accounts.deposit_tokens(amount)?;
     Ok(())
 }
