@@ -18,4 +18,7 @@ pub mod escrow {
     pub fn exec_take(ctx: Context<Take>) -> Result<()> {
         take::take_handler(ctx)
     }
+    pub fn exec_refund(ctx: Context<Refund>) -> Result<()> {
+        refund::refund_handler(ctx)
+    }
 }

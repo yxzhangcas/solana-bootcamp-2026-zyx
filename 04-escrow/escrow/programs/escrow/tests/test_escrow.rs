@@ -115,3 +115,92 @@ fn test_escrow_make_and_take() {
     ctx.svm.assert_token_balance(&taker_ata_b, 0);
     ctx.svm.assert_token_balance(&maker_ata_b, 500_000_000);
 }
+
+#[test]
+fn test_escrow_make_and_refund() {
+    let program_id = ID;
+    let mut ctx = AnchorLiteSVM::build_with_program(
+        program_id,
+        include_bytes!("../../../target/deploy/escrow.so"),
+    );
+    // 充值SOL
+    let maker = ctx.svm.create_funded_account(10_000_000_000).unwrap();
+
+    let mint_a = ctx.svm.create_token_mint(&maker, 9).unwrap();
+    let mint_b = ctx.svm.create_token_mint(&maker, 9).unwrap();
+    let maker_ata_a = ctx
+        .svm
+        .create_associated_token_account(&mint_a.pubkey(), &maker)
+        .unwrap();
+    // 充值MINT
+    ctx.svm
+        .mint_to(&mint_a.pubkey(), &maker_ata_a, &maker, 1_000_000_000)
+        .unwrap();
+
+    let seed: u64 = 42;
+    let escrow_pda = ctx.svm.get_pda(
+        &[b"escrow", maker.pubkey().as_ref(), &seed.to_le_bytes()],
+        &program_id,
+    );
+    let vault = get_associated_token_address(&escrow_pda, &mint_a.pubkey());
+
+    let make_ix = ctx
+        .program()
+        .accounts({
+            accounts::ExecMake {
+                maker: maker.pubkey(),
+                escrow: escrow_pda,
+                mint_a: mint_a.pubkey(),
+                mint_b: mint_b.pubkey(),
+                maker_ata_a,
+                vault,
+                associated_token_program: spl_associated_token_account::program::ID,
+                token_program: spl_token::id(),
+                system_program: system_program::ID,
+            }
+        })
+        .args(args::ExecMake {
+            seed,
+            receive: 500_000_000,
+            amount: 1_000_000_000,
+        })
+        .instruction()
+        .unwrap();
+    ctx.execute_instruction(make_ix, &[&maker])
+        .unwrap()
+        .assert_success();
+
+    assert!(
+        ctx.account_exists(&escrow_pda),
+        "Escrow account should exist"
+    );
+    ctx.svm.assert_token_balance(&maker_ata_a, 0);
+    ctx.svm.assert_token_balance(&vault, 1_000_000_000);
+
+    let escrow_account: Escrow = ctx.get_account(&escrow_pda).unwrap();
+    assert_eq!(escrow_account.receive, 500_000_000);
+
+    let take_ix = ctx
+        .program()
+        .accounts(accounts::ExecRefund {
+            maker: maker.pubkey(),
+            escrow: escrow_pda,
+            mint_a: mint_a.pubkey(),
+            vault,
+            maker_ata_a,
+            associated_token_program: spl_associated_token_account::program::ID,
+            token_program: spl_token::ID,
+            system_program: system_program::ID,
+        })
+        .args(args::ExecRefund {})
+        .instruction()
+        .unwrap();
+    ctx.execute_instruction(take_ix, &[&maker])
+        .unwrap()
+        .assert_success();
+
+    ctx.svm.assert_account_closed(&escrow_pda);
+    ctx.svm.assert_account_closed(&vault);
+
+    ctx.svm.assert_token_balance(&maker_ata_a, 1_000_000_000);
+}

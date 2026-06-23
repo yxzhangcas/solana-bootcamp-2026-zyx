@@ -1,0 +1,18 @@
+# [INIT]
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ mkdir 04-escrow
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ cd 04-escrow/
+yxzhang@SolanaLearn:04-escrow$ avm use latest # 1.0.2
+yxzhang@SolanaLearn:04-escrow$ anchor init --no-install --no-git escrow
+yxzhang@SolanaLearn:04-escrow$ cd escrow/
+yxzhang@SolanaLearn:escrow$ rm -rf app/ migrations/ package.json tsconfig.json .gitignore .prettierignore 
+yxzhang@SolanaLearn:escrow$ anchor build
+yxzhang@SolanaLearn:escrow$ anchor test
+# [EDIT]
+yxzhang@SolanaLearn:escrow$ cargo add anchor-spl
+# 修改Cargo.toml: idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+yxzhang@SolanaLearn:escrow$ mkdir programs/escrow/idls
+yxzhang@SolanaLearn:escrow$ cp target/idl/escrow.json programs/escrow/idls/ # 每次idl有更新都需要拷贝最新版本，否则无法测试
+yxzhang@SolanaLearn:escrow$ touch programs/escrow/tests/test_escrow.rs
+yxzhang@SolanaLearn:escrow$ cargo add --dev anchor-litesvm
+yxzhang@SolanaLearn:escrow$ anchor build
+yxzhang@SolanaLearn:escrow$ anchor test
