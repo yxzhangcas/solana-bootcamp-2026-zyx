@@ -15,15 +15,21 @@ pub struct Take<'info> {
     pub maker: SystemAccount<'info>, // owner是SystemProgram，也就是SOL主账户
     #[account(
       mut,
-      close = maker,
+      close = maker,    // 使用take会关闭pda，并将占用资金返回给maker
       seeds = [b"escrow", maker.key().as_ref(), escrow.seed.to_le_bytes().as_ref()],
       bump = escrow.bump,
-      has_one = maker @ EscrowError::InvalidMaker,
+      has_one = maker @ EscrowError::InvalidMaker,  // 约束：escrow中存在与账户列表中的maker地址相同的成员
       has_one = mint_a @ EscrowError::InvalidMintA,
       has_one = mint_b @ EscrowError::InvalidMintB,
     )]
     pub escrow: Account<'info, Escrow>,
+    #[account(
+      mint::token_program = token_program,
+    )]
     pub mint_a: InterfaceAccount<'info, Mint>,
+    #[account(
+      mint::token_program = token_program,
+    )]
     pub mint_b: InterfaceAccount<'info, Mint>,
     #[account(
       mut,
@@ -35,14 +41,14 @@ pub struct Take<'info> {
     #[account(
       init_if_needed,
       payer = taker,
-      associated_token::mint = mint_a,  // 初始化ata需要指定的参数
-      associated_token::authority = taker,
-      associated_token::token_program = token_program,
+      associated_token::mint = mint_a,  // 必选初始化参数
+      associated_token::authority = taker, // 必选初始化参数
+      associated_token::token_program = token_program, // 可选初始化参数
     )]
     pub taker_ata_a: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
       mut,
-      associated_token::mint = mint_b,  // 非初始化情况是约束条件？
+      associated_token::mint = mint_b,  // 可选约束条件，入参校验
       associated_token::authority = taker,
       associated_token::token_program = token_program,
     )]
