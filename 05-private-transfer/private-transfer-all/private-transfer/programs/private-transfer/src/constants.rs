@@ -1,4 +1,14 @@
 use anchor_lang::prelude::*;
 
-#[constant]
-pub const SEED: &str = "anchor";
+pub const TREE_DEPTH: usize = 10;
+pub const MAX_LEAVES: u64 = 1 << TREE_DEPTH;
+pub const MIN_DEPOSIT_AMOUNT: u64 = 1_000_000;
+pub const ROOT_HISTORY_SIZE: usize = 10;
+
+pub const SUNSPOT_VERIFIER_ID: Pubkey = pubkey!("BmMcAh1bzTR4XFEwgX6vrpSpdRcu9fRcSP7rtbA3eZpy");
+
+// Empty tree root using Poseidon2 (noir-lang/poseidon compatible with @zkpassport/poseidon2)
+pub const EMPTY_ROOT: [u8; 32] = [
+    0x2a, 0x77, 0x5e, 0xa7, 0x61, 0xd2, 0x04, 0x35, 0xb3, 0x1f, 0xa2, 0xc3, 0x3f, 0xf0, 0x76, 0x63,
+    0xe2, 0x45, 0x42, 0xff, 0xb9, 0xe7, 0xb2, 0x93, 0xdf, 0xce, 0x30, 0x42, 0xeb, 0x10, 0x46, 0x86,
+];
