@@ -9,7 +9,7 @@ skip-lint = false
 private_transfer = "3CHgWxcuX4zx4kZqQiQodd3db7qut5jcpTyfq8uUu7um"
 
 [provider]
-cluster = "localnet"
+cluster = "http://127.0.0.1:8899"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

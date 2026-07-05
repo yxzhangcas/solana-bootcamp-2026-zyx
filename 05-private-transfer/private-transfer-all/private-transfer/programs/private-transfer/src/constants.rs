@@ -5,7 +5,7 @@ pub const MAX_LEAVES: u64 = 1 << TREE_DEPTH;
 pub const MIN_DEPOSIT_AMOUNT: u64 = 1_000_000;
 pub const ROOT_HISTORY_SIZE: usize = 10;
 
-pub const SUNSPOT_VERIFIER_ID: Pubkey = pubkey!("BmMcAh1bzTR4XFEwgX6vrpSpdRcu9fRcSP7rtbA3eZpy");
+pub const SUNSPOT_VERIFIER_ID: Pubkey = pubkey!("DMXNCrLzw3oZWQEzRW4hmxWcfpVsCbrVFMxCgYnDxjxA");
 
 // Empty tree root using Poseidon2 (noir-lang/poseidon compatible with @zkpassport/poseidon2)
 pub const EMPTY_ROOT: [u8; 32] = [
