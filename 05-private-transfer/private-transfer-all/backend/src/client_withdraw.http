@@ -1,0 +1,20 @@
+### 
+
+POST http://localhost:4001/api/withdraw 
+Content-Type: application/json
+
+{
+  "depositNote": {
+    "nullifier": "8839183114039797473219007860730381106810631390165804182202372718952805937931",
+    "secret": "16758180397078151256669871647774501475456518011029596702892196299256402180414",
+    "amount": "1000000",
+    "commitment": "0x01096cfabe99f60165ff9078bdfbde13aa2f990f53c4efcbaf66a198ebcbc4e7",
+    "nullifierHash": "0x2ffba2854663887894c350eec4e39101ded39a9e9a2349b307c8cc1588d4c2c9",
+    "merkleRoot": "0x28ed78171ece79c8589cb547cb63a552ed00931e9c1e82c23270cc107f2564ac",
+    "leafIndex": 0,
+    "timestamp": 1783328932629
+  },
+  "recipient": "GNiXA2YysPgfWphbVWxLWZs8PT5aPzhHERE8irz4Yemz"
+}
+
+### 

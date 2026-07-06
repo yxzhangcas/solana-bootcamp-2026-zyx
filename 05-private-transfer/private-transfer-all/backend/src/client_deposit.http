@@ -1,0 +1,52 @@
+### Cannot destructure property 'amount' of 'req.body' as it is undefined.
+POST http://localhost:4001/api/deposit 
+
+### Invalid amount: must be a number
+POST http://localhost:4001/api/deposit 
+Content-Type: application/json
+
+{
+  "amount": "1_000_000"
+}
+
+### "deposit": "OK"
+POST http://localhost:4001/api/deposit 
+Content-Type: application/json
+
+{
+  "amount": "1000000"
+}
+
+### "deposit": "OK"
+POST http://localhost:4001/api/deposit 
+Content-Type: application/json
+
+{
+  "amount": 1000000
+}
+
+### Invalid amount: must be positive
+POST http://localhost:4001/api/deposit 
+Content-Type: application/json
+
+{
+  "amount": -1000000
+}
+
+### Invalid amount: must be an integer (lamports)
+POST http://localhost:4001/api/deposit 
+Content-Type: application/json
+
+{
+  "amount": 1000000.22
+}
+
+### Invalid amount: minimum deposit is 1000000 lamports (0.001 SOL)
+POST http://localhost:4001/api/deposit 
+Content-Type: application/json
+
+{
+  "amount": 1000
+}
+
+###

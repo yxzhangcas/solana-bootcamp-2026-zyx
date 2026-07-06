@@ -1,0 +1,15 @@
+### 
+
+POST http://localhost:4001/api/airdrop 
+Content-Type: application/json
+
+{
+  "address": "GNiXA2YysPgfWphbVWxLWZs8PT5aPzhHERE8irz4Yemz",
+  "amount": "1000000000000"
+}
+
+###
+
+GET http://localhost:4001/api/health
+
+### 
