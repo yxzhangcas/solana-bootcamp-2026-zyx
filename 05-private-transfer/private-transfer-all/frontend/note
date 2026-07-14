@@ -1,0 +1,5 @@
+yxzhang@SolanaLearn:private-transfer-all$ yarn create solana-dapp -t solana-foundation/templates/kit/react-vite
+# frontend
+yxzhang@SolanaLearn:private-transfer-all$ cd frontend/
+yxzhang@SolanaLearn:frontend$ touch note
+yxzhang@SolanaLearn:frontend$ rm .gitignore .prettier* error.log README.md 
