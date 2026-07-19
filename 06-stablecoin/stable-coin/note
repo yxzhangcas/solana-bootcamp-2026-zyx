@@ -1,0 +1,11 @@
+# init program with latest anchor version
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ mkdir 06-stablecoin
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ cd 06-stablecoin/
+yxzhang@SolanaLearn:06-stablecoin$ avm list
+yxzhang@SolanaLearn:06-stablecoin$ avm use 1.1.2
+yxzhang@SolanaLearn:06-stablecoin$ anchor init stable-coin
+yxzhang@SolanaLearn:06-stablecoin$ cd stable-coin/
+yxzhang@SolanaLearn:stable-coin$ touch note
+yxzhang@SolanaLearn:stable-coin$ rm -rf .git* .prettierignore  app/
+yxzhang@SolanaLearn:stable-coin$ anchor build
+yxzhang@SolanaLearn:stable-coin$ anchor test
