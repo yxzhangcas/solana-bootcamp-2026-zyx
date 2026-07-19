@@ -1,0 +1,39 @@
+########## STAGE 0 ##########
+# [TOOLS]
+# noir 1.0.0-beta.22; sunspot 1.0.0; poseidon v0.3.0
+yxzhang@SolanaLearn:~$ agave-install init 4.1.0-rc.1
+yxzhang@SolanaLearn:~$ cargo build-sbf --install-only --tools-version 1.54
+yxzhang@SolanaLearn:~$ solana --version && cargo build-sbf --version
+solana-cli 4.1.0-rc.1 (src:5efbb999; feat:c763ae0a, client:Agave)
+cargo-build-sbf 4.1.0
+platform-tools v1.54
+rustc 1.89.0
+yxzhang@SolanaLearn:~$ nargo -V # noirup -v <version> 
+nargo version = 1.0.0-beta.22
+yxzhang@SolanaLearn:~$ wget https://github.com/reilabs/sunspot/releases/download/v1.0.0/sunspot_1.0.0_linux_amd64.tar.gz
+yxzhang@SolanaLearn:~$ tar -zxf sunspot_1.0.0_linux_amd64.tar.gz
+yxzhang@SolanaLearn:~$ sudo mv sunspot /usr/local/bin/
+yxzhang@SolanaLearn:~$ git clone https://github.com/reilabs/sunspot.git
+yxzhang@SolanaLearn:~$ mkdir .sunspot/
+yxzhang@SolanaLearn:~$ mv sunspot/ .sunspot/
+yxzhang@SolanaLearn:~$ export GNARK_VERIFIER_BIN=/home/yxzhang/.sunspot/sunspot/gnark-solana/crates/verifier-bin
+# .bashrc: export GNARK_VERIFIER_BIN=/home/yxzhang/.sunspot/sunspot/gnark-solana/crates/verifier-bin
+########## STAGE 1 ##########
+# [INIT]
+yxzhang@SolanaLearn:private-transfer-all$ nargo new verifier
+yxzhang@SolanaLearn:private-transfer-all$ cd verifier/ # 提交git作为初始版本
+# [EDIT] # 手动添加Nargo.toml中的dependency，相关依赖会下载到~/nargo目录中
+yxzhang@SolanaLearn:verifier$ nargo test --show-output
+yxzhang@SolanaLearn:verifier$ nargo compile
+yxzhang@SolanaLearn:verifier$ sunspot compile target/verifier.json 
+yxzhang@SolanaLearn:verifier$ sunspot setup target/verifier.ccs 
+yxzhang@SolanaLearn:verifier$ sunspot deploy target/verifier.vk # 直接构建得到的版本不是v3，无法deploy
+yxzhang@SolanaLearn:verifier$ llvm-readelf -h target/verifier.so | grep -i flags # 0x0
+# 参考文件：https://github.com/reilabs/sunspot/blob/2e0dd1973467c65fc5369f7eb0594d1cec9ee74a/go/cmd/deploy.go 进行手动构建
+yxzhang@SolanaLearn:verifier$ export VK_PATH=`pwd`/target/verifier.vk
+yxzhang@SolanaLearn:verifier$ cargo build-sbf --arch v3 --manifest-path $GNARK_VERIFIER_BIN/Cargo.toml --sbf-out-dir target/
+yxzhang@SolanaLearn:verifier$ mv target/verifier_bin-keypair.json target/verifier-keypair.json 
+yxzhang@SolanaLearn:verifier$ mv target/verifier_bin.so target/verifier.so 
+yxzhang@SolanaLearn:verifier$ llvm-readelf -h target/verifier.so | grep -i flags # 0x3 # 提交git
+yxzhang@SolanaLearn:verifier$ solana program deploy --program-id target/verifier-keypair.json target/verifier.so 
+# Program Id: HELhybP3HoggrnWfAxH8Bzc2V98g9sLJg72Xnpv8dyu9

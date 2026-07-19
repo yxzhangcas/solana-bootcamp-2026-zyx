@@ -1,0 +1,35 @@
+########## STAGE 2 ##########
+# [INIT]
+yxzhang@SolanaLearn:private-transfer-all$ avm use 1.0.2
+yxzhang@SolanaLearn:private-transfer-all$ anchor init --no-install --no-git private-transfer
+yxzhang@SolanaLearn:private-transfer-all$ cd private-transfer/
+yxzhang@SolanaLearn:private-transfer$ rm -rf app/ migrations/ .gitignore .prettierignore
+yxzhang@SolanaLearn:private-transfer$ anchor build
+yxzhang@SolanaLearn:private-transfer$ anchor test # 提交git作为初始版本
+# [CODE]
+yxzhang@SolanaLearn:private-transfer$ anchor build # 提交git，进行verifier的开发
+# [DEPLOY]
+# 修改program中的verifier的programId：HELhybP3HoggrnWfAxH8Bzc2V98g9sLJg72Xnpv8dyu9
+yxzhang@SolanaLearn:private-transfer$ cargo build-sbf --arch v3 --manifest-path programs/private-transfer/Cargo.toml 
+yxzhang@SolanaLearn:private-transfer$ llvm-readelf -h target/deploy/private_transfer.so | grep -i flags # 0x3
+yxzhang@SolanaLearn:private-transfer$ solana program deploy --program-id target/deploy/private_transfer-keypair.json target/deploy/private_transfer.so 
+# Program Id: 3CHgWxcuX4zx4kZqQiQodd3db7qut5jcpTyfq8uUu7um
+########## STAGE 3 ##########
+# [INIT POOL]
+yxzhang@SolanaLearn:private-transfer$ mkdir scripts
+yxzhang@SolanaLearn:private-transfer$ touch scripts/init_pool.ts
+# [CODE]
+yxzhang@SolanaLearn:private-transfer$ yarn add @coral-xyz/anchor @solana/web3.js
+yxzhang@SolanaLearn:private-transfer$ export ANCHOR_PROVIDER_URL="http://127.0.0.1:8899"
+yxzhang@SolanaLearn:private-transfer$ export ANCHOR_WALLET=~/.config/solana/id.json
+yxzhang@SolanaLearn:private-transfer$ ts-node scripts/init_pool.ts 
+# Program ID: 3CHgWxcuX4zx4kZqQiQodd3db7qut5jcpTyfq8uUu7um
+# Wallet: GNiXA2YysPgfWphbVWxLWZs8PT5aPzhHERE8irz4Yemz
+# PDAs:
+#   Pool: EvHD7kQECc18XmnCspJheR5K7Tke6xkWiaZYapeyZ5m2
+#   Vault: 4zTDqoxSKppKaNKqTembTbZPovxhBCMoEtkLtW27fvNQ
+#   Nullifier Set: Ac3VvHeWJFiMHGHhT8vi3zJWEbx1zKzuoEmQCy6fPk38
+# Pool state:
+#   Authority: GNiXA2YysPgfWphbVWxLWZs8PT5aPzhHERE8irz4Yemz
+#   Next leaf index: 0
+#   Total deposits: 0
