@@ -1,0 +1,17 @@
+########## STAGE 4 ##########
+yxzhang@SolanaLearn:private-transfer-all$ mkdir backend
+yxzhang@SolanaLearn:private-transfer-all$ cd backend/
+yxzhang@SolanaLearn:backend$ yarn init
+yxzhang@SolanaLearn:backend$ tsc --init
+yxzhang@SolanaLearn:backend$ yarn add express
+yxzhang@SolanaLearn:backend$ yarn add -D typescript @types/express @types/node
+yxzhang@SolanaLearn:backend$ mkdir src
+yxzhang@SolanaLearn:backend$ touch src/server.ts
+yxzhang@SolanaLearn:backend$ touch src/client_airdrop.http
+# 编写代码，适时添加依赖，修改配置，安装rest client插件
+yxzhang@SolanaLearn:backend$ yarn add @solana/kit
+yxzhang@SolanaLearn:backend$ yarn add @zkpassport/poseidon2
+yxzhang@SolanaLearn:backend$ yarn add bs58
+# tsconfig: "target": "es2020",   
+yxzhang@SolanaLearn:backend$ ts-node src/server.ts # 通过restClient进行调用
+# tool目录中是一些工具，与主程序运行无关

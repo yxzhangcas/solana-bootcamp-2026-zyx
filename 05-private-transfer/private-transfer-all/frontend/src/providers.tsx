@@ -1,9 +1,11 @@
+import { autoDiscover, createClient } from "@solana/client";
 import { SolanaProvider } from "@solana/react-hooks";
 import { PropsWithChildren } from "react";
-import { autoDiscover, createClient } from "@solana/client";
+import { ENDPOINT_URL, ENDPOINT_WS_URL } from "./constant";
 
 const client = createClient({
-  endpoint: "https://api.devnet.solana.com",
+  endpoint: ENDPOINT_URL,
+  websocket: ENDPOINT_WS_URL, // 需要配置ws_url才能支持自动获取balance和自动刷新
   walletConnectors: autoDiscover(),
 });
 

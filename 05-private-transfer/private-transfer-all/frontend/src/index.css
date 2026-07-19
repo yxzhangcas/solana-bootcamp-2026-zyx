@@ -1,61 +1,140 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --border-strong: oklch(0.839 0.0187 78.23);
-  --border-low: oklch(0.927 0.0122 96.43);
-  --accent: oklch(0 0 0);
-  --muted: #3a3a3a;
-  --cream: oklch(0.9553 0.0029 84.56);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --radius: 0.625rem;
-  --font-sans: system-ui, sans-serif;
-  --font-mono: ui-monospace, monospace;
+  --color-bg: #0a0b0d;
+  --color-surface: #111214;
+  --color-border: #232529;
+  --color-text: #f4f4f5;
+  --color-text-secondary: #8b8d94;
+  --color-accent-purple: #9945FF;
+  --color-accent-green: #14F195;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --border-strong: oklch(1 0 0 / 0.12);
-    --border-low: oklch(1 0 0 / 0.08);
-    --accent: oklch(0.922 0 0);
-    --muted: oklch(0.75 0.01 260);
-    --cream: oklch(0.22 0.009 70.82);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-  }
+* {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-bg1: var(--background);
-  --color-foreground: var(--foreground);
-  --color-cream: var(--cream);
-  --color-border: var(--border-strong);
-  --color-border-strong: var(--border-strong);
-  --color-border-low: var(--border-low);
-  --color-primary: var(--accent);
-  --color-muted: var(--muted);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-transparent;
-  }
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
 
-  body {
-    @apply bg-bg1 text-foreground antialiased;
-    font-family: var(--font-sans);
-    color-scheme: light dark;
-  }
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--color-accent-purple);
+  box-shadow: 0 0 0 3px rgba(153, 69, 255, 0.1);
+}
+
+input::placeholder {
+  color: var(--color-text-muted);
+}
+
+input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bg-pattern {
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(153, 69, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(20, 241, 149, 0.1) 0%, transparent 50%);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.btn-success {
+  background: var(--color-accent-green);
+  color: #0a0b0d;
+}
+
+.status-success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.status-info {
+  background: rgba(153, 69, 255, 0.1);
+  border: 1px solid rgba(153, 69, 255, 0.2);
+  color: #c084fc;
+}
+
+.status-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copy-btn.copied {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.deposit-note-box {
+  background: linear-gradient(135deg, rgba(153, 69, 255, 0.05) 0%, rgba(20, 241, 149, 0.03) 100%);
+  border: 1px solid rgba(153, 69, 255, 0.15);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-accent-green) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

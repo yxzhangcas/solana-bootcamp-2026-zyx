@@ -7,6 +7,9 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "composite": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
@@ -17,5 +20,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }
