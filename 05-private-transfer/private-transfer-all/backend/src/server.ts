@@ -1,11 +1,13 @@
 import { address, lamports } from '@solana/kit';
 import express, { type Express, type Request, type Response } from 'express';
+import cors from 'cors';
 import { LAMPORTS_PER_SOL, PORT, RPC } from './constant';
 import { deposit } from './deposit';
 import { withdraw } from './withdraw';
 
 const app: Express = express();
 app.use(express.json());  // 用于解析JSON输入
+app.use(cors()) // 修复前端调用时出现的CORS Policy错误
 
 async function airdrop(req: Request, res: Response) {
   try {
