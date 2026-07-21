@@ -9,3 +9,8 @@ yxzhang@SolanaLearn:stable-coin$ touch note
 yxzhang@SolanaLearn:stable-coin$ rm -rf .git* .prettierignore  app/
 yxzhang@SolanaLearn:stable-coin$ anchor build
 yxzhang@SolanaLearn:stable-coin$ anchor test
+# edit program
+yxzhang@SolanaLearn:stable-coin$ cargo add anchor-spl
+yxzhang@SolanaLearn:stable-coin$ cargo add --dev anchor-litesvm
+yxzhang@SolanaLearn:stable-coin$ mkdir programs/stable-coin/idls
+yxzhang@SolanaLearn:stable-coin$ cp target/idl/stable_coin.json programs/stable-coin/idls/

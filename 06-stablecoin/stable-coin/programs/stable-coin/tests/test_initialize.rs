@@ -1,78 +1,77 @@
+mod utils; // 加载工具模块
 
-use {
-    anchor_lang::{
-        prelude::Pubkey,
-        solana_program::{instruction::Instruction, system_program},
-        AccountDeserialize, InstructionData, ToAccountMetas,
-    },
-    litesvm::LiteSVM,
-    solana_keypair::Keypair,
-    solana_message::{Message, VersionedMessage},
-    solana_signer::Signer,
-    solana_transaction::versioned::VersionedTransaction,
-};
+use anchor_lang::declare_program;
+use anchor_lang::prelude::*;
+use anchor_litesvm::Signer;
+use anchor_litesvm::TestHelpers;
+use anchor_spl::token_2022;
+
+use crate::utils::create_ctx;
+use crate::utils::get_config_pda;
+use crate::utils::get_mint_pda;
+use crate::utils::initialize;
+
+declare_program!(stable_coin);
 
 #[test]
 fn test_initialize() {
-    let program_id = stable_coin::id();
-    let payer = Keypair::new();
-    let counter = Pubkey::find_program_address(
-        &[stable_coin::constants::COUNTER_SEED],
-        &program_id,
-    )
-    .0;
-    let mut svm = LiteSVM::new();
-    let bytes = include_bytes!(concat!(
-        env!("CARGO_TARGET_TMPDIR"),
-        "/../deploy/stable_coin.so"
-    ));
-    svm.add_program(program_id, bytes).unwrap();
-    svm.airdrop(&payer.pubkey(), 1_000_000_000).unwrap();
+    let mut ctx = create_ctx();
+    let admin = ctx.svm.create_funded_account(10_000_000_000).unwrap();
 
-    let instruction = Instruction::new_with_bytes(
-        program_id,
-        &stable_coin::instruction::Initialize {}.data(),
-        stable_coin::accounts::Initialize {
-            payer: payer.pubkey(),
-            counter,
+    let config_pda = get_config_pda();
+    let mint_pda = get_mint_pda();
+
+    let ix = ctx
+        .program()
+        .accounts(stable_coin::client::accounts::Initialize {
+            admin: admin.pubkey(),
+            config: config_pda,
+            mint: mint_pda,
+            token_program: token_2022::ID,
             system_program: system_program::ID,
-        }
-        .to_account_metas(None),
+        })
+        .args(stable_coin::client::args::Initialize {})
+        .instruction()
+        .unwrap();
+
+    ctx.execute_instruction(ix, &[&admin])
+        .unwrap()
+        .assert_success();
+
+    // Verify accounts were created
+    assert!(
+        ctx.account_exists(&config_pda),
+        "Config account should exist"
     );
+    assert!(ctx.account_exists(&mint_pda), "Mint account should exist");
+}
 
-    let blockhash = svm.latest_blockhash();
-    let msg = Message::new_with_blockhash(&[instruction], Some(&payer.pubkey()), &blockhash);
-    let tx = VersionedTransaction::try_new(VersionedMessage::Legacy(msg), &[&payer]).unwrap();
+#[test]
+fn test_initialize_twice_fails() {
+    let mut ctx = create_ctx();
+    let admin = ctx.svm.create_funded_account(10_000_000_000).unwrap();
 
-    let res = svm.send_transaction(tx);
-    assert!(res.is_ok());
+    initialize(&mut ctx, &admin);
 
-    let counter_account = svm.get_account(&counter).unwrap();
-    let mut data: &[u8] = &counter_account.data;
-    let counter_state = stable_coin::state::Counter::try_deserialize(&mut data).unwrap();
-    assert_eq!(counter_state.count, 0);
-    assert_eq!(counter_state.authority, payer.pubkey());
+    let config_pda = get_config_pda();
+    let mint_pda = get_mint_pda();
 
-    let instruction = Instruction::new_with_bytes(
-        program_id,
-        &stable_coin::instruction::Increment {}.data(),
-        stable_coin::accounts::Increment {
-            counter,
-            authority: payer.pubkey(),
-        }
-        .to_account_metas(None),
+    let ix2 = ctx
+        .program()
+        .accounts(stable_coin::client::accounts::Initialize {
+            admin: admin.pubkey(),
+            config: config_pda,
+            mint: mint_pda,
+            token_program: token_2022::ID,
+            system_program: system_program::ID,
+        })
+        .args(stable_coin::client::args::Initialize {})
+        .instruction()
+        .unwrap();
+    let result = ctx.execute_instruction(ix2, &[&admin]);
+
+    assert!(
+        result.is_err() || !result.unwrap().is_success(),
+        "Second initialize should fail"
     );
-
-    let blockhash = svm.latest_blockhash();
-    let msg = Message::new_with_blockhash(&[instruction], Some(&payer.pubkey()), &blockhash);
-    let tx = VersionedTransaction::try_new(VersionedMessage::Legacy(msg), &[&payer]).unwrap();
-
-    let res = svm.send_transaction(tx);
-    assert!(res.is_ok());
-
-    let counter_account = svm.get_account(&counter).unwrap();
-    let mut data: &[u8] = &counter_account.data;
-    let counter_state = stable_coin::state::Counter::try_deserialize(&mut data).unwrap();
-    assert_eq!(counter_state.count, 1);
-    assert_eq!(counter_state.authority, payer.pubkey());
 }
