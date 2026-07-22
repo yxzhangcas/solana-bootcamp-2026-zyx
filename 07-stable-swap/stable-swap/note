@@ -1,0 +1,9 @@
+# INIT
+yxzhang@SolanaLearn:07-stable-swap$ anchor --version
+anchor-cli 1.1.2
+yxzhang@SolanaLearn:07-stable-swap$ anchor init stable-swap --no-git
+yxzhang@SolanaLearn:07-stable-swap$ cd stable-swap/
+yxzhang@SolanaLearn:stable-swap$ rm -rf app/ .gitignore .prettierignore 
+yxzhang@SolanaLearn:stable-swap$ anchor build
+yxzhang@SolanaLearn:stable-swap$ anchor test
+yxzhang@SolanaLearn:stable-swap$ touch note
