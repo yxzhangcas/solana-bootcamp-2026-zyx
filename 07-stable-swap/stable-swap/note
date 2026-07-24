@@ -7,3 +7,6 @@ yxzhang@SolanaLearn:stable-swap$ rm -rf app/ .gitignore .prettierignore
 yxzhang@SolanaLearn:stable-swap$ anchor build
 yxzhang@SolanaLearn:stable-swap$ anchor test
 yxzhang@SolanaLearn:stable-swap$ touch note
+# EDIT
+yxzhang@SolanaLearn:stable-swap$ cargo add anchor-spl
+yxzhang@SolanaLearn:stable-swap$ cargo add bytemuck
