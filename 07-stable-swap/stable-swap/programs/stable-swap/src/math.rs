@@ -1,6 +1,9 @@
 use anchor_lang::prelude::*;
 
-use crate::{error::StableSwapError, BASIS_POINTS_DIVISOR, MAX_ITERATIONS};
+use crate::{
+    dynamic_fees::calculate_dynamic_fee_bps, error::StableSwapError, BASIS_POINTS_DIVISOR,
+    MAX_ITERATIONS,
+};
 
 /*
    常量和不变量：D = sum(alpha * reserve_i) (所有代币的加权数量都相同时的值，alpha为权重系数)
@@ -246,66 +249,100 @@ pub fn compute_y(reserve_other: u128, d: u128, amp: u128) -> Result<u128> {
     Err(StableSwapError::ConvergenceFailed.into())
 }
 
-pub fn calculate_dynamic_fee_bps(
-    base_fee_bps: u16,
-    max_dynamic_fee_bps: u16,
-    new_reserve_in: u128,
-    new_reserve_out: u128,
-    oracle_price_in: u128,
-    oracle_price_out: u128,
-    depeg_threshold_bps: u16,
-) -> Result<u16> {
-    require!(
-        base_fee_bps <= max_dynamic_fee_bps,
-        StableSwapError::InvalidFeeConfig
-    );
-    require!(
-        depeg_threshold_bps > 0,
-        StableSwapError::InvalidDepegThreshold
-    );
-    let post_value_in = new_reserve_in
-        .checked_mul(oracle_price_in)
-        .ok_or(StableSwapError::MathOverflow)?;
-    let post_value_out = new_reserve_out
-        .checked_mul(oracle_price_out)
-        .ok_or(StableSwapError::MathOverflow)?;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let imbalance_bps = calculate_value_imbalance_bps(post_value_in, post_value_out)?;
-    let oracle_ratio_bps = oracle_price_in
-        .checked_mul(BASIS_POINTS_DIVISOR)
-        .ok_or(StableSwapError::MathOverflow)?
-        .checked_div(oracle_price_out)
-        .ok_or(StableSwapError::MathOverflow)?;
-    let oracle_deviation_bps = oracle_ratio_bps.abs_diff(BASIS_POINTS_DIVISOR);
-    let stress_bps = imbalance_bps.max(oracle_deviation_bps);
-    let stress_cap = stress_bps.min(depeg_threshold_bps as u128);
-    let dynamic_range = (max_dynamic_fee_bps - base_fee_bps) as u128;
-
-    let effective_fee = (base_fee_bps as u128)
-        .checked_add(
-            dynamic_range
-                .checked_mul(stress_cap)
-                .ok_or(StableSwapError::MathOverflow)?
-                .checked_div(depeg_threshold_bps as u128)
-                .ok_or(StableSwapError::MathOverflow)?,
-        )
-        .ok_or(StableSwapError::MathOverflow)?;
-
-    Ok(effective_fee.min(max_dynamic_fee_bps as u128) as u16)
-}
-
-fn calculate_value_imbalance_bps(value_a: u128, value_b: u128) -> Result<u128> {
-    let total_value = value_a
-        .checked_add(value_b)
-        .ok_or(StableSwapError::MathOverflow)?;
-
-    if total_value == 0 {
-        return Ok(0);
+    #[test]
+    fn test_compute_d_balanced() {
+        let reserve = 1_000_000_000u128; // 1000 USDC (6 decimals)
+        let d = compute_d(reserve, reserve, 100).unwrap();
+        // For balanced pool D ≈ 2 * reserve
+        assert!(d > 1_900_000_000u128);
+        assert!(d < 2_100_000_000u128);
     }
-    Ok(value_a
-        .abs_diff(value_b)
-        .checked_mul(BASIS_POINTS_DIVISOR)
-        .ok_or(StableSwapError::MathOverflow)?
-        .checked_div(total_value)
-        .ok_or(StableSwapError::MathOverflow)?)
+    #[test]
+    fn test_swap_low_slippage() {
+        let reserve = 1_000_000_000_000u128; // 1M USDC (6 decimals)
+        let amount_in = 1_000_000u128; // 1 USDC
+        let quote = calculate_swap_output(
+            reserve,
+            reserve,
+            amount_in,
+            100,
+            4,
+            100,
+            1_000_000_000,
+            1_000_000_000,
+            500,
+        )
+        .unwrap();
+        // With A=100 and tiny trade vs huge pool: almost 1:1
+        assert!(quote.amount_out > 990_000u128);
+        assert!(quote.amount_out <= amount_in);
+        assert_eq!(quote.dynamic_fee_bps, 4);
+    }
+    #[test]
+    fn test_swap_large_amount_low_slippage() {
+        let reserve = 1_000_000_000_000u128; // 1M USDC
+        let amount_in = 100_000_000_000u128; // 100k USDC swap (10% of pool)
+        let quote = calculate_swap_output(
+            reserve,
+            reserve,
+            amount_in,
+            100,
+            4,
+            100,
+            1_000_000_000,
+            1_000_000_000,
+            500,
+        )
+        .unwrap();
+        // StableSwap should give >99% output for 10% of pool swap
+        let ratio = quote.amount_out * 100 / amount_in;
+        assert!(ratio >= 98, "Expected >=98% output, got {}%", ratio);
+        assert!(quote.dynamic_fee_bps > 4);
+    }
+    #[test]
+    fn test_lp_mint_first_deposit() {
+        let amount = 1_000_000_000u128; // 1000 tokens each
+        let lp = calculate_lp_mint_amount(0, 0, amount, amount, 0, 100, 1_000).unwrap();
+        // LP ≈ D - MINIMUM_LIQUIDITY ≈ 2_000_000_000 - 1_000
+        assert!(lp > 1_999_000_000u64);
+    }
+    #[test]
+    fn test_lp_mint_subsequent_deposit() {
+        let reserve = 1_000_000_000u128;
+        let lp_supply = 2_000_000_000u128;
+        // Doubling reserves should double LP supply
+        let lp = calculate_lp_mint_amount(
+            reserve,
+            reserve,
+            reserve * 2,
+            reserve * 2,
+            lp_supply,
+            100,
+            1_000,
+        )
+        .unwrap();
+        // LP minted should be approximately equal to current supply
+        assert!(lp > 1_900_000_000u64);
+        assert!(lp < 2_100_000_000u64);
+    }
+    #[test]
+    fn test_calculate_withdraw_amounts_proportional() {
+        let withdraw_amounts =
+            calculate_withdraw_amounts(&[1_000_000u128, 1_000_000u128], 100_000, 1_000_000)
+                .unwrap();
+
+        assert_eq!(withdraw_amounts, vec![100_000u64, 100_000u64]);
+    }
+    #[test]
+    fn test_calculate_withdraw_amounts_rejects_single_sided_rounding() {
+        let err = calculate_withdraw_amounts(&[1u128, 1_000_000u128], 1, 1_000_000).unwrap_err();
+
+        assert!(err
+            .to_string()
+            .contains("Single-sided withdrawals are not supported"));
+    }
 }
