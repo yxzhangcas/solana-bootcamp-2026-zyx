@@ -1,0 +1,9 @@
+yxzhang@SolanaLearn:08-x402$ npx -y create-solana-dapp@latest -t solana-foundation/templates/community/x402-template
+yxzhang@SolanaLearn:08-x402$ cd x402-example/
+yxzhang@SolanaLearn:x402-example$ touch note
+yxzhang@SolanaLearn:x402-example$ rm package-lock.json 
+yxzhang@SolanaLearn:x402-example$ rm .gitignore 
+yxzhang@SolanaLearn:x402-example$ yarn
+yxzhang@SolanaLearn:x402-example$ npx @next/codemod@canary middleware-to-proxy . --force
+yxzhang@SolanaLearn:x402-example$ cp .env.example .env.local
+yxzhang@SolanaLearn:x402-example$ yarn run dev

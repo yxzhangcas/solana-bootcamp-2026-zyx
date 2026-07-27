@@ -9,3 +9,7 @@ test-ledger
 
 Prover.toml
 generated
+
+.agents
+.claude
+.next
