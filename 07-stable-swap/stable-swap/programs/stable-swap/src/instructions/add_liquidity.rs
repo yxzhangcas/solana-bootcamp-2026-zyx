@@ -3,7 +3,7 @@ use anchor_spl::token::{self, Mint, MintTo, Token, TokenAccount, Transfer};
 
 use crate::{
     error::StableSwapError, math::calculate_lp_mint_amount, oracle::load_pair_status, Pool,
-    DEFAULT_MAX_PRICE_AGE_SEC, MINIMUN_LIQUIDITY,
+    DEFAULT_MAX_PRICE_AGE_SEC, MINIMUM_LIQUIDITY,
 };
 
 #[derive(Accounts)]
@@ -101,7 +101,7 @@ pub fn add_liquidity_handler(
         new_reserve_b,
         lp_supply,
         amp,
-        MINIMUN_LIQUIDITY,
+        MINIMUM_LIQUIDITY,
     )?;
     require!(lp_to_mint >= min_lp_out, StableSwapError::SlippageExceeded);
     require!(lp_to_mint > 0, StableSwapError::ZeroAmount);

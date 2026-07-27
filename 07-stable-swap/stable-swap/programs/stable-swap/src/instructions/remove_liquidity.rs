@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Burn, Mint, Token, TokenAccount, Transfer};
 
-use crate::{error::StableSwapError, math::calculate_withdraw_amounts, Pool, MINIMUN_LIQUIDITY};
+use crate::{error::StableSwapError, math::calculate_withdraw_amounts, Pool, MINIMUM_LIQUIDITY};
 
 #[derive(Accounts)]
 pub struct RemoveLiquidity<'info> {
@@ -65,7 +65,7 @@ pub fn remove_liquidity_handler(
     let lp_supply = ctx.accounts.lp_mint.supply as u128;
     // 池子有最小流动性限制，这部分流动性不铸造lp_mint
     let pool_liquidity = (lp_supply as u128)
-        .checked_add(MINIMUN_LIQUIDITY as u128)
+        .checked_add(MINIMUM_LIQUIDITY as u128)
         .ok_or(StableSwapError::MathOverflow)?;
     require!(pool_liquidity > 0, StableSwapError::EmptyPool);
     require!(

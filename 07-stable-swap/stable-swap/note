@@ -10,3 +10,6 @@ yxzhang@SolanaLearn:stable-swap$ touch note
 # EDIT
 yxzhang@SolanaLearn:stable-swap$ cargo add anchor-spl
 yxzhang@SolanaLearn:stable-swap$ cargo add bytemuck
+yxzhang@SolanaLearn:stable-swap$ cargo add --dev anchor-litesvm
+yxzhang@SolanaLearn:stable-swap$ cargo add --dev solana-sdk@3.0.0 # 注意版本！4.0.x有问题！
+# 将stable-swap作为依赖显式进行添加，并去掉endpoint属性，否则与AnchorLiteSVM冲突
