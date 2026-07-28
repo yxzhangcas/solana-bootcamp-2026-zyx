@@ -9,18 +9,25 @@ export default function Home() {
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             This is a Next.js template with Solana payment integration using the x402 protocol.
           </p>
-          <div className="flex gap-4">
+          <div className="grid lg:grid-cols-2 gap-4">
             <Link
               href="/content/cheap"
-              className="inline-block px-6 py-3 bg-neutral-800 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
+              className="inline-block px-6 py-3 bg-neutral-800 text-white text-center rounded-lg font-semibold hover:opacity-90 transition-opacity"
             >
-              Access Cheap Content 🪣
+              Access Cheap Content 🌟
             </Link>
             <Link
               href="/content/expensive"
-              className="inline-block px-6 py-3 bg-neutral-800 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
+              className="inline-block px-6 py-3 bg-neutral-800 text-white text-center rounded-lg font-semibold hover:opacity-90 transition-opacity"
             >
               Access Expensive Content 💰
+            </Link>
+            <Link
+              href="/fortune/pay"
+              // href="/fortune/run"
+              className="inline-block px-6 py-3 bg-neutral-800 text-white text-center rounded-lg font-semibold hover:opacity-90 transition-opacity"
+            >
+              Fortune Teller 🔮
             </Link>
           </div>
         </div>

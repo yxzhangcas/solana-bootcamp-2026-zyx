@@ -1,6 +1,6 @@
-import { Address } from 'viem'
-import { paymentMiddleware, Resource, Network } from 'x402-next'
 import { NextRequest } from 'next/server'
+import { Address } from 'viem'
+import { Network, paymentMiddleware, Resource } from 'x402-next'
 
 const address = process.env.NEXT_PUBLIC_RECEIVER_ADDRESS as Address
 const network = process.env.NEXT_PUBLIC_NETWORK as Network
@@ -21,6 +21,14 @@ const x402PaymentMiddleware = paymentMiddleware(
       price: '$0.25',
       config: {
         description: 'Access to expensive content',
+      },
+      network,
+    },
+    '/fortune/pay': {
+    // '/fortune/run': {
+      price: '$0.02',
+      config: {
+        description: 'AI Fortune Telling Service',
       },
       network,
     },

@@ -1,0 +1,16 @@
+POST https://api.openai.com/v1/chat/completions HTTP/1.1
+content-type: application/json
+Authorization: Bearer sk-abcdef1234567890abcdef1234567890abcdef12
+
+{
+    "model": "gpt-4o-mini",
+    "messages": [
+        { "role": "system", "content": "You are a fortune teller." },
+        { "role": "user", "content": "Read my fortune 20200505" },
+    ],
+    "max_tokens": 300,
+}
+
+######
+
+GET https://www.baidu.com HTTP/1.1
