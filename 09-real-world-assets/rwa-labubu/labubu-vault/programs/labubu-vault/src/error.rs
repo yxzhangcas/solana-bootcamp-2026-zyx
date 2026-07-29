@@ -1,9 +1,9 @@
 use anchor_lang::prelude::*;
 
 #[error_code]
-pub enum ErrorCode {
-    #[msg("Only the counter authority can update this counter")]
-    Unauthorized,
-    #[msg("Counter has reached the maximum value")]
-    CounterOverflow,
+pub enum LabubuError {
+    #[msg("All Labubu sold out")]
+    SoldOut,
+    #[msg("Invalid Labubu ID (must be 1-11)")]
+    InvalidLabubuId,
 }

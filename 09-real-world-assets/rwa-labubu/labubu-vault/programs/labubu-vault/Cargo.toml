@@ -21,10 +21,11 @@ custom-panic = []
 
 
 [dependencies]
-anchor-lang = "1.1.2"
+anchor-lang = { version = "1.1.2", features = ["init-if-needed"] }
 anchor-spl = "1.1.2"
 
 [dev-dependencies]
+anchor-litesvm = "0.4.0"
 
 
 [lints.rust]

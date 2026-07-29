@@ -1,78 +1,33 @@
+mod utils;
 
-// use {
-//     anchor_lang::{
-//         prelude::Pubkey,
-//         solana_program::{instruction::Instruction, system_program},
-//         AccountDeserialize, InstructionData, ToAccountMetas,
-//     },
-//     litesvm::LiteSVM,
-//     solana_keypair::Keypair,
-//     solana_message::{Message, VersionedMessage},
-//     solana_signer::Signer,
-//     solana_transaction::versioned::VersionedTransaction,
-// };
+use anchor_lang::declare_program;
+use anchor_lang::prelude::*;
+use anchor_litesvm::AnchorLiteSVM;
+use anchor_litesvm::AssertionHelpers;
+use anchor_litesvm::Signer;
+use anchor_litesvm::TestHelpers;
 
-// #[test]
-// fn test_initialize() {
-//     let program_id = labubu_vault::id();
-//     let payer = Keypair::new();
-//     let counter = Pubkey::find_program_address(
-//         &[labubu_vault::constants::COUNTER_SEED],
-//         &program_id,
-//     )
-//     .0;
-//     let mut svm = LiteSVM::new();
-//     let bytes = include_bytes!(concat!(
-//         env!("CARGO_TARGET_TMPDIR"),
-//         "/../deploy/labubu_vault.so"
-//     ));
-//     svm.add_program(program_id, bytes).unwrap();
-//     svm.airdrop(&payer.pubkey(), 1_000_000_000).unwrap();
+use crate::labubu_vault::accounts::LabubuCollection;
+use crate::utils::initialize_collection;
 
-//     let instruction = Instruction::new_with_bytes(
-//         program_id,
-//         &labubu_vault::instruction::Initialize {}.data(),
-//         labubu_vault::accounts::Initialize {
-//             payer: payer.pubkey(),
-//             counter,
-//             system_program: system_program::ID,
-//         }
-//         .to_account_metas(None),
-//     );
+declare_program!(labubu_vault);
 
-//     let blockhash = svm.latest_blockhash();
-//     let msg = Message::new_with_blockhash(&[instruction], Some(&payer.pubkey()), &blockhash);
-//     let tx = VersionedTransaction::try_new(VersionedMessage::Legacy(msg), &[&payer]).unwrap();
+#[test]
+pub fn test_initialize_collection() {
+    let program_bytes = include_bytes!("../../../target/deploy/labubu_vault.so");
+    let mut ctx = AnchorLiteSVM::build_with_program(labubu_vault::ID, program_bytes);
+    let authority = ctx.create_funded_account(10_000_000_000).unwrap();
 
-//     let res = svm.send_transaction(tx);
-//     assert!(res.is_ok());
+    initialize_collection(&mut ctx, &authority);
 
-//     let counter_account = svm.get_account(&counter).unwrap();
-//     let mut data: &[u8] = &counter_account.data;
-//     let counter_state = labubu_vault::state::Counter::try_deserialize(&mut data).unwrap();
-//     assert_eq!(counter_state.count, 0);
-//     assert_eq!(counter_state.authority, payer.pubkey());
-
-//     let instruction = Instruction::new_with_bytes(
-//         program_id,
-//         &labubu_vault::instruction::Increment {}.data(),
-//         labubu_vault::accounts::Increment {
-//             counter,
-//             authority: payer.pubkey(),
-//         }
-//         .to_account_metas(None),
-//     );
-
-//     let blockhash = svm.latest_blockhash();
-//     let msg = Message::new_with_blockhash(&[instruction], Some(&payer.pubkey()), &blockhash);
-//     let tx = VersionedTransaction::try_new(VersionedMessage::Legacy(msg), &[&payer]).unwrap();
-
-//     let res = svm.send_transaction(tx);
-//     assert!(res.is_ok());
-
-//     let counter_account = svm.get_account(&counter).unwrap();
-//     let mut data: &[u8] = &counter_account.data;
-//     let counter_state = labubu_vault::state::Counter::try_deserialize(&mut data).unwrap();
-//     assert_eq!(counter_state.count, 1);
-//     assert_eq!(counter_state.authority, payer.pubkey());
-// }
+    // 检查结果
+    let collection_pda = ctx.svm.get_pda(&[b"collection"], &labubu_vault::ID);
+    ctx.svm.assert_account_exists(&collection_pda);
+    let collection = ctx
+        .get_account::<LabubuCollection>(&collection_pda)
+        .unwrap();
+    assert!(collection.authority == authority.pubkey());
+    assert!(collection.remaining_supply[0] == labubu_vault::constants::NORMAL_SUPPLY);
+    assert!(collection.remaining_supply[10] == labubu_vault::constants::RARE_SUPPLY);
+    assert!(collection.total_minted == 0);
+}

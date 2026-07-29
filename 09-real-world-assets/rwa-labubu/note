@@ -13,4 +13,7 @@ yxzhang@SolanaLearn:labubu-vault$ cargo add anchor-spl # 添加到idl-build
 # 去掉dev-dependencies，注释掉test_initialize.rs
 yxzhang@SolanaLearn:labubu-vault$ anchor build
 yxzhang@SolanaLearn:labubu-vault$ anchor test
+# EDIT
+yxzhang@SolanaLearn:labubu-vault$ cargo add --dev anchor-litesvm
+yxzhang@SolanaLearn:labubu-vault$ cp target/idl/labubu_vault.json programs/labubu-vault/idls/
 # NextJs Program

@@ -1,10 +1,8 @@
 use anchor_lang::prelude::*;
 
 #[constant]
-pub const COUNTER_SEED: &[u8] = b"counter";
-
+pub const TOTAL_LABUBU_TYPES: u16 = 11;
 #[constant]
-pub const HELLO_WORLD_LAMPORTS: u64 = 1;
-
+pub const NORMAL_SUPPLY: u16 = 120;
 #[constant]
-pub const MAX_COUNT: u64 = 10;
+pub const RARE_SUPPLY: u16 = 6;

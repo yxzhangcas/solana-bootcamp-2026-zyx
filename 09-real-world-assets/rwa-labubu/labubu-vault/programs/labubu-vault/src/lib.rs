@@ -15,11 +15,13 @@ declare_id!("8ZgzUhriQhkKLsp6kr4rrW68UYvjifHiUr4WrPCZJJ3Q");
 pub mod labubu_vault {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        crate::instructions::initialize::handle_initialize(ctx)
+    pub fn initialize_collection(ctx: Context<InitializeCollection>) -> Result<()> {
+        crate::instructions::initialize_collection::handle_initialize_collection(ctx)
     }
-
-    pub fn increment(ctx: Context<Increment>) -> Result<()> {
-        crate::instructions::increment::handle_increment(ctx)
+    pub fn create_mint(ctx: Context<CreateLabubuMint>, labubu_id: u8) -> Result<()> {
+        crate::instructions::create_mint::handle_create_mint(ctx, labubu_id)
+    }
+    pub fn mint_random(ctx: Context<MintRandom>, labubu_id: u8) -> Result<()> {
+        crate::instructions::mint_random::handle_mint_random(ctx, labubu_id)
     }
 }
