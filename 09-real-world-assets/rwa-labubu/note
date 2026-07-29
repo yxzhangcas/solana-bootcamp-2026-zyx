@@ -16,4 +16,9 @@ yxzhang@SolanaLearn:labubu-vault$ anchor test
 # EDIT
 yxzhang@SolanaLearn:labubu-vault$ cargo add --dev anchor-litesvm
 yxzhang@SolanaLearn:labubu-vault$ cp target/idl/labubu_vault.json programs/labubu-vault/idls/
+yxzhang@SolanaLearn:labubu-vault$ anchor build
+yxzhang@SolanaLearn:labubu-vault$ anchor test
 # NextJs Program
+yxzhang@SolanaLearn:rwa-labubu$ npx -y create-solana-dapp@latest -t solana-foundation/templates/kit/nextjs
+yxzhang@SolanaLearn:rwa-labubu$ cd labubu-web/
+yxzhang@SolanaLearn:labubu-web$ rm .gitignore .prettier* README.md error.log empty-module.js og-image.png 
