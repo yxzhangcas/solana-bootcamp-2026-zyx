@@ -1,0 +1,16 @@
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ mkdir 09-real-world-assets
+yxzhang@SolanaLearn:solana-bootcamp-2026-zyx$ cd 09-real-world-assets/
+yxzhang@SolanaLearn:09-real-world-assets$ mkdir rwa-labubu
+yxzhang@SolanaLearn:09-real-world-assets$ cd rwa-labubu/
+yxzhang@SolanaLearn:rwa-labubu$ touch note
+# Anchor Program
+yxzhang@SolanaLearn:rwa-labubu$ anchor --version
+anchor-cli 1.1.2
+yxzhang@SolanaLearn:rwa-labubu$ anchor init labubu-vault --no-install --no-git
+yxzhang@SolanaLearn:rwa-labubu$ cd labubu-vault/
+yxzhang@SolanaLearn:labubu-vault$ rm -rf app/ .gitignore .prettierignore 
+yxzhang@SolanaLearn:labubu-vault$ cargo add anchor-spl # 添加到idl-build
+# 去掉dev-dependencies，注释掉test_initialize.rs
+yxzhang@SolanaLearn:labubu-vault$ anchor build
+yxzhang@SolanaLearn:labubu-vault$ anchor test
+# NextJs Program
