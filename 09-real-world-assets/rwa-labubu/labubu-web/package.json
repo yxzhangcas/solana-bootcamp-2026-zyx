@@ -1,6 +1,7 @@
 {
   "name": "labubu-web",
   "scripts": {
+    "codama:js": "codama run js",
     "build": "next build",
     "ci": "npm run build && npm run lint && npm run format:check",
     "dev": "next dev",
@@ -24,6 +25,8 @@
     "node": ">=24"
   },
   "dependencies": {
+    "@codama/nodes-from-anchor": "^1.5.3",
+    "@codama/renderers-js": "^2.3.1",
     "@solana-program/memo": "^0.12.0",
     "@solana-program/system": "^0.13.0",
     "@solana-program/token": "^0.15.0",
@@ -31,6 +34,8 @@
     "@solana/kit-plugin-rpc": "^0.13.0",
     "@solana/kit-plugin-wallet": "^0.14.0",
     "@solana/react": "^7.0.0",
+    "@solana/react-hooks": "^1.4.1",
+    "codama": "^1.10.0",
     "next": "16.2.6",
     "next-themes": "^0.4.6",
     "react": "19.2.3",

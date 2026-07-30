@@ -1,6 +1,9 @@
 "use client";
 
 import { ActionsPanel } from "./components/actions/actions-panel";
+import { LabubuCard } from "./labubu/labubu-card";
+import { MyProviders } from "./labubu/my-providers";
+import WalletConnection from "./labubu/wallet-connection";
 
 export default function Home() {
   return (
@@ -11,6 +14,12 @@ export default function Home() {
         client, and @solana/react. Connect a wallet, switch networks from the
         header, and try SOL transfers, token actions, and memos.
       </p>
+      <section className="mt-8 grid gap-4 sm:grid-cols-1">
+        <MyProviders>
+          <WalletConnection />
+          <LabubuCard />
+        </MyProviders>
+      </section>
       <ActionsPanel />
     </main>
   );

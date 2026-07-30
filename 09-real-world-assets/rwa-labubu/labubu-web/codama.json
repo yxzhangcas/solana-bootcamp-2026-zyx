@@ -1,0 +1,11 @@
+{
+  "idl": "../labubu-vault/target/idl/labubu_vault.json",
+  "scripts": {
+    "js": [
+      {
+        "from": "@codama/renderers-js",
+        "args": ["./app", {"generatedFolder": "generated"}]
+      }
+    ]
+  }
+}
