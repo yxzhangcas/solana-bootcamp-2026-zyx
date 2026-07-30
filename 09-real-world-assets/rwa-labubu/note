@@ -18,7 +18,32 @@ yxzhang@SolanaLearn:labubu-vault$ cargo add --dev anchor-litesvm
 yxzhang@SolanaLearn:labubu-vault$ cp target/idl/labubu_vault.json programs/labubu-vault/idls/
 yxzhang@SolanaLearn:labubu-vault$ anchor build
 yxzhang@SolanaLearn:labubu-vault$ anchor test
+yxzhang@SolanaLearn:labubu-vault$ anchor deploy
+Program ID: 8ZgzUhriQhkKLsp6kr4rrW68UYvjifHiUr4WrPCZJJ3Q
+# SCRIPT
+yxzhang@SolanaLearn:labubu-vault$ yarn
+yxzhang@SolanaLearn:labubu-vault$ yarn add @anchor-lang/core
+yxzhang@SolanaLearn:labubu-vault$ tsc --init # "resolveJsonModule": true,
+yxzhang@SolanaLearn:labubu-vault$ export ANCHOR_WALLET=~/.config/solana/id.json
+yxzhang@SolanaLearn:labubu-vault$ ts-node scripts/initialize.ts 
+Program ID: 8ZgzUhriQhkKLsp6kr4rrW68UYvjifHiUr4WrPCZJJ3Q
+Collection PDA: 2nDZTx5QDEE4Fev1oWvrDvGgqWsHYueM5FYdguzdw2Jz
+# 注释掉 target/types/labubu_vault.ts 中的 "relations":["collection"]
+yxzhang@SolanaLearn:labubu-vault$ ts-node scripts/create_mint.ts 
+✅ Mint #1 created successfully: A3wPCZf6QxGuWbNHY4oRi2fv1dNo2KYGtqgRpkaHC9qr
+✅ Mint #2 created successfully: 1417s8a2N1EfZsUo47deKuvZNp1LPRqcZhmiUbbD5T2u
+✅ Mint #3 created successfully: 2g3s7vHgCEwi4xHZV2SS6GddmZdD2JorTsvybNLTJT5C
+✅ Mint #4 created successfully: H7e5cXFScBoJtP6tCmJwaae4eNb8Q34QTLn34ZrhkNDT
+✅ Mint #5 created successfully: E3jFWDF4mATwpJJB18DgMih2s5a5KJsiiak88toChNmr
+✅ Mint #6 created successfully: Cwm2s2vDtcznLEA1rjF2dXHDYM9U1nkHeuFHKeD2CMG6
+✅ Mint #7 created successfully: H3ZJjhFbSdRsTEwnij7LHCkyfjCmd6r7cnbKVHMrmTEe
+✅ Mint #8 created successfully: 33fNXyj67XoMJMH7qhdUQxkggpBEbRRNp7PwjRmqadJQ
+✅ Mint #9 created successfully: EmjAWkpvg9cxTNGsdmJAGyXUCLpDeUDBSEgjiiCnYgsE
+✅ Mint #10 created successfully: 2gJRD8dbfynygnkN2GxjM3vBTJiSCc3sd6sZk9gvBAtd
+✅ Mint #11 created successfully: J3KPbyxkWzs39GLpDjpjW6kYqNLEpdzC8jZeqcRNe1Rs
 # NextJs Program
 yxzhang@SolanaLearn:rwa-labubu$ npx -y create-solana-dapp@latest -t solana-foundation/templates/kit/nextjs
 yxzhang@SolanaLearn:rwa-labubu$ cd labubu-web/
 yxzhang@SolanaLearn:labubu-web$ rm .gitignore .prettier* README.md error.log empty-module.js og-image.png 
+yxzhang@SolanaLearn:labubu-web$ npm i @solana/react-hooks
+yxzhang@SolanaLearn:labubu-web$ npm i codama
