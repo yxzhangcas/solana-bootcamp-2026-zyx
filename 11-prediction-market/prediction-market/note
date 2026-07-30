@@ -1,0 +1,15 @@
+yxzhang@SolanaLearn:11-prediction-market$ yarn create solana-dapp -t solana-foundation/templates/kit/nextjs-anchor
+yxzhang@SolanaLearn:11-prediction-market$ cd prediction-market/
+yxzhang@SolanaLearn:prediction-market$ touch note
+yxzhang@SolanaLearn:prediction-market$ yarn run anchor-build
+yxzhang@SolanaLearn:prediction-market$ yarn run anchor-test
+# Anchor.toml修改cluster为localnet
+# package.json添加："anchor-deploy": "cd anchor && anchor deploy",
+yxzhang@SolanaLearn:prediction-market$ yarn run anchor-deploy
+Program ID: EbKXhqf8irRLK6rZP6e7MYkTHppkJxcTi25Cyjuh3sHA
+yxzhang@SolanaLearn:prediction-market$ solana airdrop 10 GUaFpyxWonsCk94i4JHBBncaiTG4sVDFHdvRHiTdrFie 
+yxzhang@SolanaLearn:prediction-market$ yarn run dev
+# http://localhost:3000 web页面选择localnet，便可以验证了
+# 页面刚开始打开可能报错，是因为网络类型没有设置为默认的devnet，只有devnet刷新不报错，其它几个网络类型都报错。
+# 具体错误位置定位到：cluster-context.tsx
+yxzhang@SolanaLearn:prediction-market$ rm .gitignore .prettier* error.log 
