@@ -1,0 +1,2 @@
+yxzhang@SolanaLearn:11-prediction-market$ npx -y create-solana-dapp@latest -t solana-foundation/templates/kit/prediction-market
+yxzhang@SolanaLearn:11-prediction-market$ cd prediction-market
