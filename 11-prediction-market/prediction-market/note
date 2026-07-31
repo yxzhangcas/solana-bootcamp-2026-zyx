@@ -13,3 +13,14 @@ yxzhang@SolanaLearn:prediction-market$ yarn run dev
 # 页面刚开始打开可能报错，是因为网络类型没有设置为默认的devnet，只有devnet刷新不报错，其它几个网络类型都报错。
 # 具体错误位置定位到：cluster-context.tsx
 yxzhang@SolanaLearn:prediction-market$ rm .gitignore .prettier* error.log 
+# Anchor Program Code
+yxzhang@SolanaLearn:prediction-market$ yarn run anchor-build
+# Anchor Test Code
+yxzhang@SolanaLearn:prediction-market$ cd anchor/
+yxzhang@SolanaLearn:anchor$ cargo add --dev anchor-litesvm # 必须dev
+yxzhang@SolanaLearn:anchor$ mkdir programs/prediction_market/idls
+yxzhang@SolanaLearn:anchor$ mkdir programs/prediction_market/tests
+yxzhang@SolanaLearn:anchor$ anchor build
+yxzhang@SolanaLearn:anchor$ cp target/idl/prediction_market.json programs/prediction_market/idls/
+yxzhang@SolanaLearn:anchor$ anchor test
+yxzhang@SolanaLearn:anchor$ cd ..
