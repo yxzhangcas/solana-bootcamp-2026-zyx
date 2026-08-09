@@ -9,11 +9,26 @@ yxzhang@SolanaLearn:prediction-market$ git commit -m "[pred-mark] init program"
 yxzhang@SolanaLearn:prediction-market$ npm run anchor-build
 yxzhang@SolanaLearn:prediction-market$ npm run anchor-test
 yxzhang@SolanaLearn:prediction-market$ npm run anchor-deploy
-Deploying cluster: http://127.0.0.1:8899
-Upgrade authority: /home/yxzhang/.config/solana/id.json
-Program ID: 4W88mTBdwLUv3RsheJGJhpTp1Vm6CEGvWyYsA2c8KWvt
+# Deploying cluster: http://127.0.0.1:8899
+# Upgrade authority: /home/yxzhang/.config/solana/id.json
+# Program ID: 4W88mTBdwLUv3RsheJGJhpTp1Vm6CEGvWyYsA2c8KWvt
 yxzhang@SolanaLearn:prediction-market$ npm run codama:js
 yxzhang@SolanaLearn:prediction-market$ npm run dev
 - Local:         http://localhost:3000
 - Network:       http://172.30.243.160:3000
 # 点击Airdrop直接获取测试SOL，验证deposit和withdraw都OK
+yxzhang@SolanaLearn:prediction-market$ git commit -m "[pred-mark] build program"
+# [开发合约: 增量开发]
+yxzhang@SolanaLearn:prediction-market$ npm run anchor-build
+yxzhang@SolanaLearn:prediction-market$ cp anchor/target/idl/vault.json anchor/programs/vault/idls/
+yxzhang@SolanaLearn:prediction-market$ npm run anchor-test
+yxzhang@SolanaLearn:prediction-market$ npm run anchor-deploy
+# Auto-extending program data by 103016 bytes (117080 → 220096) before upgrade…
+# Attempt 1 failed: Auto-extend failed: RPC response error -32002: Transaction simulation failed: Error processing Instruction 0: invalid instruction data; 3 log messages:
+#   Program BPFLoaderUpgradeab1e11111111111111111111111 invoke [1]
+#   ExtendProgram was superseded by ExtendProgramChecked
+#   Program BPFLoaderUpgradeab1e11111111111111111111111 failed: invalid instruction data
+# 暂时跳过问题，直接重置validator数据，改为全新部署
+yxzhang@SolanaLearn:prediction-market$ npm run anchor-deploy
+# Deploying cluster: http://127.0.0.1:8899
+# Program ID: 4W88mTBdwLUv3RsheJGJhpTp1Vm6CEGvWyYsA2c8KWvt
