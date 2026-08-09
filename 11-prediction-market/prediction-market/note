@@ -1,2 +1,19 @@
+# [启动本地validator]
+yxzhang@SolanaLearn:~$ solana-test-validator
+# [创建项目]
 yxzhang@SolanaLearn:11-prediction-market$ npx -y create-solana-dapp@latest -t solana-foundation/templates/kit/prediction-market
 yxzhang@SolanaLearn:11-prediction-market$ cd prediction-market
+yxzhang@SolanaLearn:prediction-market$ git add .
+yxzhang@SolanaLearn:prediction-market$ git commit -m "[pred-mark] init program"
+# [构建项目]
+yxzhang@SolanaLearn:prediction-market$ npm run anchor-build
+yxzhang@SolanaLearn:prediction-market$ npm run anchor-test
+yxzhang@SolanaLearn:prediction-market$ npm run anchor-deploy
+Deploying cluster: http://127.0.0.1:8899
+Upgrade authority: /home/yxzhang/.config/solana/id.json
+Program ID: 4W88mTBdwLUv3RsheJGJhpTp1Vm6CEGvWyYsA2c8KWvt
+yxzhang@SolanaLearn:prediction-market$ npm run codama:js
+yxzhang@SolanaLearn:prediction-market$ npm run dev
+- Local:         http://localhost:3000
+- Network:       http://172.30.243.160:3000
+# 点击Airdrop直接获取测试SOL，验证deposit和withdraw都OK
