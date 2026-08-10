@@ -50,7 +50,7 @@ export function WalletButton() {
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-xl border border-border-low bg-card p-3 shadow-lg">
+          <div className="absolute right-0 top-full z-100 mt-2 w-64 rounded-xl border border-border-low bg-card p-3 shadow-lg">
             <p className="mb-2 text-xs font-medium text-muted">
               Choose a wallet
             </p>
@@ -105,7 +105,7 @@ export function WalletButton() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl border border-border-low bg-card p-4 shadow-lg">
+        <div className="absolute right-0 top-full z-100 mt-2 w-72 rounded-xl border border-border-low bg-card p-4 shadow-lg">
           <div className="mb-3">
             <p className="text-xs text-muted">Balance</p>
             <p className="text-lg font-bold tabular-nums">

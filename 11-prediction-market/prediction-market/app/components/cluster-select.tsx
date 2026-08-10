@@ -42,7 +42,7 @@ export function ClusterSelect() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-40 rounded-xl border border-border-low bg-card p-2 shadow-lg">
+        <div className="absolute right-0 top-full z-100 mt-2 w-40 rounded-xl border border-border-low bg-card p-2 shadow-lg">
           <div className="space-y-1">
             {CLUSTERS.map((c) => (
               <button
