@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { useState } from "react";
 import { CreateMarket } from "./create-market";
 import { Footer } from "./footer";
+import { MarketHeader } from "./market-header";
 import { MarketList } from "./market-list";
-import WalletButton from "./wallet-button";
 import { WorkDescription } from "./work-description";
 
 export default function MarketPanel() {
@@ -11,29 +10,7 @@ export default function MarketPanel() {
 
   return (
     <div className="min-h-screen text-foreground bg-bg1">
-      <header className="sticky top-0 border-b border-border-low bg-bg1/80 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground text-background font-bold text-sm">
-              PM
-            </div>
-            <div>
-              <h1 className="text-sm font-semibold">Prediction Markets</h1>
-              <p className="text-xs text-muted">Solana Localnet</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium">Markets</span>
-            <Link
-              href="/activity"
-              className="text-sm text-muted hover:text-foreground transition"
-            >
-              Activity
-            </Link>
-            <WalletButton />
-          </div>
-        </div>
-      </header>
+      <MarketHeader path="/" />
       <main className="mx-auto max-w-5xl px-4 py-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
