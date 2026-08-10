@@ -1,10 +1,11 @@
 "use client";
 
-import { GridBackground } from "./components/grid-background";
+import { GridBackground } from "./components/standalone/grid-background";
 import { HeaderPanel } from "./components/header-panel";
-import { MainPanel } from "./components/main-panel";
+import { MainPanel } from "./components/standalone/main-panel";
 import { VaultCard } from "./components/vault-card";
 import { WalletBalance } from "./components/wallet-balance";
+import MarketPanel from "./market/market-panel";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
             <MainPanel />
           </section>
           <div className="space-y-10 pb-20">
+            <MarketPanel />
             <WalletBalance />
             <VaultCard />
           </div>

@@ -1,20 +1,22 @@
 "use client";
 
+import type { TransactionSigner } from "@solana/kit";
 import {
   createContext,
-  useContext,
-  useState,
   useCallback,
-  useMemo,
+  useContext,
   useEffect,
+  useMemo,
   useRef,
+  useState,
   type PropsWithChildren,
 } from "react";
-import type { TransactionSigner } from "@solana/kit";
-import type { WalletConnector, WalletSession } from "./types";
-import { discoverWallets, watchWallets } from "./standard";
-import { createWalletSigner } from "./signer";
-import { useCluster } from "../../components/cluster-context";
+import { createWalletSigner } from "../lib/wallet/signer";
+import { discoverWallets, watchWallets } from "../lib/wallet/standard";
+import type { WalletConnector, WalletSession } from "../lib/wallet/types";
+import { useCluster } from "./cluster-provider";
+
+const STORAGE_KEY = "solana:last-connector";
 
 const WALLET_STATUS = {
   DISCONNECTED: "disconnected",
@@ -37,8 +39,6 @@ type WalletContextValue = {
 };
 
 const WalletContext = createContext<WalletContextValue | null>(null);
-
-const STORAGE_KEY = "solana:last-connector";
 
 export function WalletProvider({ children }: PropsWithChildren) {
   const { cluster } = useCluster();

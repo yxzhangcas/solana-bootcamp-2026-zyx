@@ -3,12 +3,12 @@
 import { lamports as sol } from "@solana/kit";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useBalance } from "../hooks/use-balance";
 import { ellipsify } from "../lib/explorer";
-import { useBalance } from "../lib/hooks/use-balance";
 import { lamportsToSolString } from "../lib/lamports";
-import { useSolanaClient } from "../lib/solana-client-context";
-import { useWallet } from "../lib/wallet/context";
-import { useCluster } from "./cluster-context";
+import { useSolanaClient } from "../providers/client-provider";
+import { useCluster } from "../providers/cluster-provider";
+import { useWallet } from "../providers/wallet-provider";
 
 export function WalletBalance() {
   const { wallet, status } = useWallet();

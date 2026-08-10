@@ -1,7 +1,7 @@
 "use client";
 
 import { ClusterSelect } from "./cluster-select";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from "./standalone/theme-toggle";
 import { WalletButton } from "./wallet-button";
 
 export function HeaderPanel() {

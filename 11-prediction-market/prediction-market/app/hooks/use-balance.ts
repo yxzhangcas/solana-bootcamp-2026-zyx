@@ -1,10 +1,10 @@
 "use client";
 
+import { type Address, type Lamports } from "@solana/kit";
 import { useEffect } from "react";
 import useSWR from "swr";
-import { type Address, type Lamports } from "@solana/kit";
-import { useCluster } from "../../components/cluster-context";
-import { useSolanaClient } from "../solana-client-context";
+import { useSolanaClient } from "../providers/client-provider";
+import { useCluster } from "../providers/cluster-provider";
 
 export function useBalance(address?: Address) {
   const { cluster } = useCluster();

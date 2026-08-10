@@ -1,8 +1,20 @@
 "use client";
 
+import { createClient } from "@solana/kit";
+import { rpc, rpcAirdrop } from "@solana/kit-plugin-rpc";
 import { createContext, useContext, useMemo, type ReactNode } from "react";
-import { createSolanaClient, type SolanaClient } from "./solana-client";
-import { useCluster } from "../components/cluster-context";
+import { CLUSTER_URLS, ClusterMoniker, WS_URLS } from "../lib/solana-client";
+import { useCluster } from "./cluster-provider";
+
+function createSolanaClient(cluster: ClusterMoniker) {
+  const url = CLUSTER_URLS[cluster];
+  const wsUrl = WS_URLS[cluster];
+  return createClient()
+    .use(rpc(url, { url: wsUrl }))
+    .use(rpcAirdrop());
+}
+
+type SolanaClient = ReturnType<typeof createSolanaClient>;
 
 const SolanaClientContext = createContext<SolanaClient | null>(null);
 

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { useSWRConfig } from "swr";
 import type { Instruction } from "@solana/kit";
 import { createClient } from "@solana/kit-client-rpc";
-import { useWallet } from "../wallet/context";
-import { useCluster } from "../../components/cluster-context";
-import { getClusterUrl, getClusterWsConfig } from "../solana-client";
+import { useCallback, useMemo, useState } from "react";
+import { useSWRConfig } from "swr";
+import { getClusterUrl, getClusterWsConfig } from "../lib/solana-client";
+import { useCluster } from "../providers/cluster-provider";
+import { useWallet } from "../providers/wallet-provider";
 
 export function useSendTransaction() {
   const { signer } = useWallet();
@@ -14,6 +14,7 @@ export function useSendTransaction() {
   const { mutate } = useSWRConfig();
   const [isSending, setIsSending] = useState(false);
 
+  // 创建了新的client，并未使用provider中已经创建的client(先于wallet创建，未配置signer，仅支持查询和airdrop)
   const txClient = useMemo(
     () =>
       signer

@@ -1,5 +1,3 @@
-"use client";
-
 export function MainPanel() {
   return (
     <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">

@@ -1,11 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useWallet } from "../lib/wallet/context";
-import { useSendTransaction } from "../lib/hooks/use-send-transaction";
-import { useBalance } from "../lib/hooks/use-balance";
-import { lamportsFromSol, lamportsToSolString } from "../lib/lamports";
 import { type Address } from "@solana/kit";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   getDepositInstruction,
@@ -13,7 +9,11 @@ import {
   getWithdrawInstructionAsync,
 } from "../generated/vault";
 import { parseTransactionError } from "../lib/errors";
-import { useCluster } from "./cluster-context";
+import { useBalance } from "../hooks/use-balance";
+import { useSendTransaction } from "../hooks/use-send-transaction";
+import { lamportsFromSol, lamportsToSolString } from "../lib/lamports";
+import { useCluster } from "../providers/cluster-provider";
+import { useWallet } from "../providers/wallet-provider";
 
 export function VaultCard() {
   const { wallet, signer, status } = useWallet();
