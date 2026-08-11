@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PlusIcon } from "../utils/icon";
 import { CreateMarket } from "./create-market";
 import { Footer } from "./footer";
 import { MarketHeader } from "./market-header";
@@ -23,19 +24,7 @@ export default function MarketPanel() {
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="flex items-center gap-2 rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium transition hover:opacity-90"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
+            <PlusIcon size={4} />
             New Market
           </button>
         </div>

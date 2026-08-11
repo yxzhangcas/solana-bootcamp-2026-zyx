@@ -21,6 +21,7 @@ import { useCluster } from "../providers/cluster-provider";
 import { useWallet } from "../providers/wallet-provider";
 import ClaimSection from "./claim-section";
 import { formatSol, LAMPORTS_PER_SOL } from "./utils";
+import { rpcFetchPositionAccount } from "../utils/fetch";
 
 function getTimeRemaining(resolutionTime: number): string {
   const now = Date.now() / 1000;
@@ -108,25 +109,8 @@ export function MarketCard({
         getAddressEncoder().encode(walletAddress),
       ],
     });
-    const response = await fetch(CLUSTER_URLS[cluster], {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        id: 1,
-        method: "getAccountInfo",
-        params: [
-          positionAddress[0],
-          { encoding: "base64", commitment: "confirmed" },
-        ],
-      }),
-    });
-
-    const result = await response.json();
-
-    if (!result.result?.value) {
-      return null;
-    }
+     const result = await rpcFetchPositionAccount(cluster, positionAddress[0]);
+    if (!result) return null;
 
     const data = Uint8Array.from(atob(result.result.value.data[0]), (c) =>
       c.charCodeAt(0)

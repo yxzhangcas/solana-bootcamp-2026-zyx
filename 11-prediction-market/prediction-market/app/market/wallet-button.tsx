@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { ellipsify } from "../lib/explorer";
 import { useWallet } from "../providers/wallet-provider";
+import {
+  AnimateSpin,
+  DisconnectIcon,
+  DollarCircle,
+  OpenCloseArrow,
+} from "../utils/icon";
 
 export default function WalletButton() {
-  const { connectors, connect, disconnect, wallet, status } =
-    useWallet();
+  const { connectors, connect, disconnect, wallet, status } = useWallet();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const address = wallet?.account.address;
@@ -38,19 +43,7 @@ export default function WalletButton() {
         >
           <span className="h-2 w-2 rounded-full bg-green-500" />
           <span className="font-mono">{ellipsify(address, 4)}</span>
-          <svg
-            className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          <OpenCloseArrow size={4} isOpen={isOpen} />
         </button>
         {isOpen && (
           <div className="absolute right-0 top-full mt-2 w-64 rounded-lg border border-border-low bg-card p-3 shadow-lg z-100">
@@ -63,38 +56,14 @@ export default function WalletButton() {
                 href="https://faucet.solana.com/"
                 className="flex items-center gap-2 w-full rounded-md px-3 py-2 text-sm text-left transition hover:bg-cream/50"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+                <DollarCircle size={4} />
                 Get devnet SOL
               </a>
               <button
                 onClick={handleDisconnect}
                 className="flex items-center gap-2 w-full rounded-md px-3 py-2 text-sm text-left text-red-600 transition hover:bg-red-50"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
+                <DisconnectIcon size={4} />
                 Disconnect
               </button>
             </div>
@@ -112,43 +81,13 @@ export default function WalletButton() {
       >
         {status === "connecting" ? (
           <>
-            <svg
-              className="h-4 w-4 animate-spin"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
+            <AnimateSpin size={4} />
             Connecting...
           </>
         ) : (
           <>
             Connect Wallet
-            <svg
-              className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            <OpenCloseArrow size={4} isOpen={isOpen} />
           </>
         )}
       </button>

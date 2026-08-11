@@ -1,4 +1,5 @@
 import { formatSol } from "../market/utils";
+import { DollarCircle, RightArrow } from "../utils/icon";
 import { ActivityStatsData } from "./position-list";
 
 function getRoiColorClass(hasActivity: boolean, isPositive: boolean): string {
@@ -117,19 +118,7 @@ export function ActivityStats({ stats }: ActivityStatsProps) {
         <div className="mt-4 rounded-xl bg-green-50 border border-green-200 p-4 flex items-center justify-between animate-fade-in stagger-5">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100">
-              <svg
-                className="h-5 w-5 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <DollarCircle size={5} color="green" />
             </div>
             <div>
               <p className="font-medium text-green-800">
@@ -143,19 +132,7 @@ export function ActivityStats({ stats }: ActivityStatsProps) {
             </div>
           </div>
           <div className="hidden sm:flex h-8 w-8 items-center justify-center rounded-full bg-green-200 text-green-700">
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <RightArrow size={4} />
           </div>
         </div>
       )}
